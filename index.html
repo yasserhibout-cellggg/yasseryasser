@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lumina Travel & Events - Ultra 3D</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:"Inter",sans-serif;}
+body{background:#050816;color:white;overflow-x:hidden;}
+nav{position:fixed;width:100%;top:0;display:flex;justify-content:space-between;align-items:center;padding:20px 50px;background:rgba(255,255,255,0.03);backdrop-filter:blur(10px);z-index:10;}
+nav .logo{font-size:24px;font-weight:700;}
+nav .menu{display:flex;gap:25px;}
+nav .menu a{color:white;text-decoration:none;font-weight:500;transition:0.3s;}
+nav .menu a:hover{color:#2563eb;}
+.burger{display:none;cursor:pointer;flex-direction:column;gap:5px;}
+.burger div{width:25px;height:3px;background:white;border-radius:2px;}
+.hero{height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;position:relative;z-index:2;}
+.hero h1{font-size:80px;margin-bottom:25px;}
+.hero span{color:#facc15;}
+.hero p{max-width:700px;color:#cbd5e1;font-size:20px;}
+.badge{margin-bottom:25px;padding:10px 25px;border-radius:35px;background:rgba(255,255,255,0.08);font-size:14px;}
+
+/* خدمات */
+.services{
+    padding:140px 60px;
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(360px,1fr)); /* أكبر حجم */
+    gap:50px;
+    position:relative;
+    z-index:2;
+}
+
+/* بطاقة */
+.card{
+    background:rgba(255,255,255,0.05);
+    border-radius:25px;
+    overflow:hidden;
+    backdrop-filter:blur(10px);
+    border:1px solid rgba(255,255,255,0.08);
+    cursor:pointer;
+    transform-style:preserve-3d;
+    perspective:1200px;
+}
+.card img{
+    width:100%;
+    height:280px; /* أكبر صورة */
+    object-fit:cover;
+    border-radius:20px;
+}
+.content{padding:28px;}
+.content h3{margin-bottom:12px;font-size:20px;}
+.content p{font-size:15px;color:#cbd5e1;margin-bottom:18px;}
+.btn{display:inline-block;padding:12px 20px;background:#2563eb;border-radius:10px;text-decoration:none;color:white;font-size:15px;}
+.btn:hover{background:#1d4ed8;}
+
+/* شهادات العملاء */
+.testimonials{padding:120px 60px;text-align:center;position:relative;z-index:2;}
+.testimonials h2{margin-bottom:50px;font-size:32px;}
+.testimonial-card{background:rgba(255,255,255,0.05);padding:35px;border-radius:25px;margin:25px;display:inline-block;max-width:320px;backdrop-filter:blur(10px);font-size:16px;}
+
+/* دعوة للعمل */
+.cta{padding:100px 60px;text-align:center;position:relative;z-index:2;}
+.cta a{padding:18px 28px;font-size:20px;background:#2563eb;border-radius:12px;color:white;text-decoration:none;}
+.cta a:hover{background:#1d4ed8;}
+
+footer{text-align:center;padding:50px;color:#94a3b8;position:relative;z-index:2;}
+#bg{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;}
+
+@media(max-width:768px){nav .menu{display:none;}.burger{display:flex;}}
+</style>
+</head>
+<body>
+
+<canvas id="bg"></canvas>
+
+<nav>
+    <div class="logo">LuminaTravel & Events</div>
+    <div class="menu">
+        <a href="#services">Services</a>
+        <a href="#testimonials">Clients</a>
+        <a href="#cta">Get Quote</a>
+    </div>
+    <div class="burger" onclick="toggleMenu()">
+        <div></div><div></div><div></div>
+    </div>
+</nav>
+
+<section class="hero">
+    <div class="badge">Premium Corporate Solutions</div>
+    <h1>Elevate Your <span>Travel & Events</span></h1>
+    <p>Seamless booking experiences for flights, premium accommodations, vehicle rentals, and impactful event branding.</p>
+</section>
+
+<section class="services" id="services">
+    <div class="card">
+        <img src="https://images.unsplash.com/photo-1519167758481-83f550bb49b3">
+        <div class="content">
+            <h3>Hotels & Group Booking</h3>
+            <p>Premium accommodations and event spaces.</p>
+            <a class="btn">Request Quote →</a>
+        </div>
+    </div>
+    <div class="card">
+        <img src="https://images.unsplash.com/photo-1502920917128-1aa500764cbd">
+        <div class="content">
+            <h3>Flight Tickets</h3>
+            <p>Domestic and international flight reservations.</p>
+            <a class="btn">Request Quote →</a>
+        </div>
+    </div>
+    <div class="card">
+        <img src="https://images.unsplash.com/photo-1503376780353-7e6692767b70">
+        <div class="content">
+            <h3>Vehicle Rental</h3>
+            <p>Premium cars, vans and buses.</p>
+            <a class="btn">Request Quote →</a>
+        </div>
+    </div>
+    <div class="card">
+        <img src="https://images.unsplash.com/photo-1511578314322-379afb476865">
+        <div class="content">
+            <h3>Event Branding</h3>
+            <p>Creative branding and digital promotion.</p>
+            <a class="btn">Request Quote →</a>
+        </div>
+    </div>
+</section>
+
+<section class="testimonials" id="testimonials">
+    <h2>What Our Clients Say</h2>
+    <div class="testimonial-card">"Amazing service and seamless booking!" – John D.</div>
+    <div class="testimonial-card">"Professional and reliable for our corporate events." – Maria S.</div>
+    <div class="testimonial-card">"Highly recommended for premium travel experiences." – Liam P.</div>
+</section>
+
+<section class="cta" id="cta">
+    <h2>Ready to Elevate Your Next Event?</h2>
+    <a href="#">Get Your Custom Quote</a>
+</section>
+
+<footer>© 2026 Lumina Travel & Events</footer>
+
+<script>
+/* BURGER MENU */
+function toggleMenu(){
+    const menu=document.querySelector('.menu');
+    menu.style.display = (menu.style.display === 'flex') ? 'none' : 'flex';
+}
+
+/* THREE JS BACKGROUND */
+const scene=new THREE.Scene();
+const camera=new THREE.PerspectiveCamera(75,window.innerWidth/window.innerHeight,0.1,1000);
+const renderer=new THREE.WebGLRenderer({canvas:document.querySelector("#bg"),alpha:true});
+renderer.setSize(window.innerWidth,window.innerHeight);
+camera.position.z=45;
+
+const torus=new THREE.Mesh(new THREE.TorusGeometry(12,3,16,100),new THREE.MeshStandardMaterial({color:0x2563eb}));
+scene.add(torus);
+
+const spheres=[];
+for(let i=0;i<60;i++){
+    let sphere=new THREE.Mesh(new THREE.SphereGeometry(2,32,32),new THREE.MeshStandardMaterial({color:0xfacc15}));
+    sphere.position.set((Math.random()-0.5)*120,(Math.random()-0.5)*120,(Math.random()-0.5)*120);
+    spheres.push(sphere);
+    scene.add(sphere);
+}
+
+const light=new THREE.PointLight(0xffffff,1,100);
+light.position.set(25,25,25);
+scene.add(light);
+
+const controls=new THREE.OrbitControls(camera,renderer.domElement);
+controls.enableZoom=false;
+
+function animate(){
+    requestAnimationFrame(animate);
+    torus.rotation.x+=0.01; torus.rotation.y+=0.005;
+    spheres.forEach(s=>s.rotation.x+=0.01); spheres.forEach(s=>s.rotation.y+=0.01);
+    renderer.render(scene,camera);
+}
+animate();
+
+/* GSAP 3D PARALLAX CARD EFFECT */
+document.querySelectorAll('.card').forEach(card=>{
+    card.addEventListener('mousemove', e=>{
+        const rect = card.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        const centerX = rect.width/2;
+        const centerY = rect.height/2;
+        const rotateX = ((y - centerY)/centerY)*10;
+        const rotateY = ((x - centerX)/centerX)*10;
+        gsap.to(card,{rotationX:rotateX, rotationY:rotateY, scale:1.07, boxShadow:`0px 25px 60px rgba(0,0,0,0.8)`, duration:0.3, ease:"power3.out"});
+    });
+    card.addEventListener('mouseleave', ()=>{
+        gsap.to(card,{rotationX:0, rotationY:0, scale:1, boxShadow:`0px 12px 35px rgba(0,0,0,0.5)`, duration:0.5, ease:"power3.out"});
+    });
+});
+</script>
+
+</body>
+</html>
